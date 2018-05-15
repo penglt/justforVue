@@ -7,7 +7,7 @@ import detail from '@/components/detail'
 Vue.use(Router)
 
 export default new Router({
-  mode:'history',
+  mode:'hash',
   routes: [
     {
       path: '/',
@@ -45,6 +45,17 @@ export default new Router({
       path: '/upload',
       component: function(resolve){
         require(['@/admin/addmood'],resolve)
+      }
+    },    {
+      path: '/manage',
+      component: function(resolve){
+        require(['@/admin/managemood'],resolve)
+      }
+    },
+    {
+      path: '/admin/detail/:productId',
+      component: function(resolve){
+        require(['@/admin/mooddetail'],resolve)
       }
     },
   ]

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>实战演练</title>
+    <style>
+      .active{
+        color: skyblue;
+      }
+      .errorC{
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <p>{{msg}}</p>
+      <div v-for=" msg in msgArr">
+        <p>{{msg}}</p>
+      </div>
+
+      <span v-on:click="reverse">兴趣爱好：{{ mag }}</span>
+      <p>当前的加载时间缓存是{{now}}</p>
+      <p>当前的跟随变动计算是{{now2()}}</p>
+      <p>这是一个{{lianjie}}链接<a v-bind:href="url" target="_blank">&nbsp;&nbsp;{{lianjie}}&nbsp;&nbsp;</a></p>
+      <button v-if="luck" v-on:click="change2">阿里</button>
+      <button v-else="luck" v-on:click="change">百度</button>
+      <p>
+        问一个答案是 yes/no 的问题：
+        <input v-model="question">
+      </p>
+      <p>{{ answer }}</p>
+      <div v-bind:class="{ active: active ,'errorC':!active}">isActive为真字体变天空蓝</div>
+     <p>随机的函数决定你的评价</p>
+      <div v-if="Math.random() > 0.7">
+        你很帅
+      </div>
+      <div v-else-if="Math.random() > 0.4">
+        你真行
+      </div>
+      <div v-else>
+        你好棒
+      </div>
+      <template v-for="todo in todos">
+       <li>{{ todo.text }}</li>
+      </template>
+      <template v-if="loginType === 'username'">
+        <label>用户名</label>
+        <input placeholder="请输入用户名" v-model="username"  key="username-input">
+      </template>
+      <template v-else>
+        <label>我猜你刚刚输入的是</label>
+        <input placeholder="******" v-model="username" key="username-input">
+      </template>
+      <todo-item   v-for="good in groceryList"  v-bind:justtext="good"   v-bind:key="good.id">
+      </todo-item>
+    </div>
+    <!-- built files will be auto injected -->
+    <script type="text/javascript" src="vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+    <script>
+      Vue.component('todo-item', {
+        props: ['justtext'],
+        template: '<li>{{ justtext.text }}</li>'
+      })
+      //注册全局组件需要在实例化之前注册
+      var vm = new Vue({
+        // 选项
+        el: '#app',
+        data : {
+          groceryList: [
+            { id: 0, text: '蔬菜' },
+            { id: 1, text: '奶酪' },
+            { id: 2, text: '随便其它什么人吃的东西' }
+          ],
+          todos: [
+            { text: '吃饭' },
+            { text: '睡觉' },
+            { text: '打豆豆' }
+          ],
+          msg:'好好学',
+          msgArr:['我听说多吃零食可以减肥',  '喜之郎果冻吃起来是辣的','欢乐的时光没人会怀念的','你猜这些哪一个会是真的'],
+          luck:false,
+          mag:'北国风光，千里冰封，万里雪飘。' +
+          '望长城内外，惟余莽莽；大河上下，顿失滔滔。' +
+          '山舞银蛇，原驰蜡象，欲与天公试比高。' +
+          '须晴日，看红装素裹，分外妖娆。' +
+          '江山如此多娇，引无数英雄竞折腰。' +
+          '惜秦皇汉武，略输文采；唐宗宋祖，稍逊风骚。' +
+          '一代天骄，成吉思汗，只识弯弓射大雕。' +
+          '俱往矣，数风流人物，还看今朝。',
+          username:'',
+          lianjie:'百度',
+          url:'https://www.baidu.com',
+          question: '',
+          answer: '你要先提出问题，我才能给你答案！',
+          active:true,
+          error: null,
+          loginType:'username',
+        },
+        created: function () {
+          // `this` 指向 vm 实例  被创建时执行其函数
+          console.log('大家都知道现在的年轻人需要: ' + this.msg)
+        },
+        computed: {
+          now: function () {
+            return Date.now()
+          }
+        },
+        watch: {
+          // 只要 question 发生改变，此函数就会执行
+          question: function (newQuestion) {
+            this.answer = '等待输入停止……'
+            this.getAnswer()
+          }
+        },
+        methods: {
+          // 在运行特别消耗性能的操作时，
+          // 在下面这种场景中，我们需要限制访问 yesno.wtf/api 的频率，
+          // 等到用户输入完毕之后，ajax 请求才会发出。
+          getAnswer: _.debounce(
+            function () {
+              if (this.question.indexOf('？') === -1) {
+                this.answer = '您提出的问题需要包含一个中文问号。)'
+                return
+              }
+              this.answer = '思考中……'
+              var vm = this
+              axios.get('https://yesno.wtf/api')
+                .then(function (response) {
+                  vm.answer = _.capitalize(response.data.answer)
+                })
+                .catch(function (error) {
+                  vm.answer = '错误！API 无法处理。' + error
+                })
+            },
+            // 这是用户停止输入操作后所等待的毫秒数。
+            500
+          ),
+          reverse:function () {
+            this.mag=this.mag.split('').reverse().join('')
+          },
+          change2:function () {
+            this.url = 'https://www.baidu.com'
+            this.lianjie = "百度"
+            this.luck = !this.luck
+            this.active = !this.active
+          },
+          change:function () {
+            this.url = 'https://www.taobao.com'
+            this.lianjie = "淘宝"
+            this.luck = !this.luck
+            this.active = !this.active
+          },
+          now2:function () {
+            return Date.now()
+          },
+//          classObject: function () {
+//            return {
+//              active: this.isActive,
+//              'text-danger': !this.isActive,
+//            }
+//          }
+        },
+
+      })
+
+    </script>
+  </body>
+</html>

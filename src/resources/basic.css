@@ -40,3 +40,6 @@ input[type=checkbox] {
 .right{
   float:right;
 }
+.left{
+  float: left;
+}

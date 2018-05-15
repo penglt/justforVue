@@ -14,7 +14,7 @@ export default {
   data() {
     return {
       lists: List.data()["admin"],
-      msg: '这里只是一个首页',
+      msg: '这里只是一个后台的首页',
       msg2:this.$store.state.type,
     }
   },

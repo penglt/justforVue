@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>实战演练</title>
+    <style>
+      #files{
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input type="file" id="files"  onchange="gogogo();"/>
+    </div>
+    <script>
+
+
+      function gogogo(){
+        var selectedFile = document.getElementById("files").files[0];//获取读取的File对象
+        console.log(selectedFile)
+       // var name = selectedFile.name;//读取选中文件的文件名
+       // var size = selectedFile.size;//读取选中文件的大小
+     //   console.log("文件名:"+name+"大小："+size);
+
+        var reader = new FileReader();//这里是核心！！！读取操作就是由它完成的。
+        reader.readAsText(selectedFile);//读取文件的内容
+
+        reader.onload = function(){
+          console.log(this.result);//当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
+        };
+      }
+    </script>
+  </body>
+</html>

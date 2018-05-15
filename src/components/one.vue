@@ -17,7 +17,7 @@ export default {
   data() {
     return {
       lists: List.data()["2016Q1"],
-      msg: '这里将来应该是官网的首页',
+      msg: '这里是vue的首页',
       msg2:this.$store.state.type,
     }
   },

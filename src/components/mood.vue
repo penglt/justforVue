@@ -79,23 +79,6 @@ export default {
     }
   },
   mounted: function () {
-       // var url = 'http://192.168.1.205:8080/rs/content/mediaNoticeList'
-        var url = this.HOST+'/register'
-        this.$ajax.post(url,{
-         firstName: 'Fred',
-         lastName: 'Flintstone'
-        }).then(response => {
-               console.log(response.data);
-              // get body data
-              // this.someData = response.body;
-
-          }, response => {
-              console.log("error");
-          });
-
-
-
-
         // this.$store.state.luck=this.$store.state.luck+'hehe'
       },
   watch:{

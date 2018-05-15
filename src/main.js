@@ -16,8 +16,8 @@ Vue.config.productionTip = false
 import VueResource from 'vue-resource'
 Vue.use(VueResource);
 Vue.use(MintUI)
-Vue.prototype.HOST = '/api'  //或者打包的时候注释这一句
-// Vue.prototype.HOST = ''  //打包的时候放出这一句
+// Vue.prototype.HOST = '/api'  //或者打包的时候注释这一句
+Vue.prototype.HOST = ''  //打包的时候放出这一句
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
